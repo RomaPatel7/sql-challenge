@@ -1,74 +1,66 @@
--- Exported from QuickDBD: https://www.quickdatabasediagrams.com/
--- Link to schema: https://app.quickdatabasediagrams.com/#/d/8nI71S
--- NOTE! If you have used non-SQL datatypes in your design, you will have to change these here.
+--Question 1
+SELECT "Employees".emp_no, "Employees".last_name, "Employees".first_name, "Employees".gender, "Salaries".salary
+FROM "Salaries"
+INNER JOIN "Employees" ON 
+"Employees".emp_no = "Salaries".emp_no;
 
 
-CREATE TABLE "Departments" (
-    "dept_no" VARCHAR   NOT NULL,
-    "dept_name" VARCHAR   NOT NULL,
-    CONSTRAINT "pk_Departments" PRIMARY KEY (
-        "dept_no"
-     )
-);
+--Question 2
+SELECT * FROM "Employees"
+WHERE hire_date LIKE '1986%';
 
-CREATE TABLE "Dept_Emp" (
-    "emp_no" integer   NOT NULL,
-    "dept_no" VARCHAR   NOT NULL,
-    "from_date" VARCHAR   NOT NULL,
-    "to_date" VARCHAR   NOT NULL
-);
 
-CREATE TABLE "Dept_Manager" (
-    "dept_no" VARCHAR   NOT NULL,
-    "emp_no" integer   NOT NULL,
-    "from_date" VARCHAR   NOT NULL,
-    "to_date" VARCHAR   NOT NULL
-);
+--Question 3
+SELECT "Departments".dept_no, "Departments".dept_name, "Dept_Manager".emp_no, "Employees".last_name, "Employees".first_name, "Dept_Manager".from_date, "Dept_Manager".to_date
+FROM "Departments"
+INNER JOIN "Dept_Manager" ON
+"Dept_Manager".dept_no = "Departments".dept_no
+JOIN "Employees" ON
+"Employees".emp_no = "Dept_Manager".emp_no;
 
-CREATE TABLE "Employees" (
-    "emp_no" integer   NOT NULL,
-    "birth_date" VARCHAR   NOT NULL,
-    "first_name" VARCHAR   NOT NULL,
-    "last_name" VARCHAR   NOT NULL,
-    "gender" VARCHAR   NOT NULL,
-    "hire_date" VARCHAR   NOT NULL,
-    CONSTRAINT "pk_Employees" PRIMARY KEY (
-        "emp_no"
-     )
-);
 
-CREATE TABLE "Salaries" (
-    "emp_no" integer   NOT NULL,
-    "salary" integer   NOT NULL,
-    "from_date" VARCHAR   NOT NULL,
-    "to_date" VARCHAR   NOT NULL
-);
+--Question 4
+SELECT "Employees".emp_no, "Employees".last_name, "Employees".first_name, "Departments".dept_name
+FROM "Employees"
+INNER JOIN "Dept_Emp" ON
+"Employees".emp_no = "Dept_Emp".emp_no
+INNER JOIN "Departments" ON 
+"Departments".dept_no = "Dept_Emp".dept_no;
 
-CREATE TABLE "Titles" (
-    "emp_no" integer   NOT NULL,
-    "title" VARCHAR   NOT NULL,
-    "from_date" VARCHAR   NOT NULL,
-    "to_date" VARCHAR   NOT NULL
-);
 
-ALTER TABLE "Dept_Emp" ADD CONSTRAINT "fk_Dept_Emp_emp_no" FOREIGN KEY("emp_no")
-REFERENCES "Employees" ("emp_no");
+--Question 5
+SELECT * from "Employees"
+WHERE first_name = 'Hercules'
+AND last_name LIKE 'B%';
 
-ALTER TABLE "Dept_Emp" ADD CONSTRAINT "fk_Dept_Emp_dept_no" FOREIGN KEY("dept_no")
-REFERENCES "Departments" ("dept_no");
 
-ALTER TABLE "Dept_Manager" ADD CONSTRAINT "fk_Dept_Manager_dept_no" FOREIGN KEY("dept_no")
-REFERENCES "Departments" ("dept_no");
+--Question 6
+SELECT "Employees".emp_no, "Employees".last_name, "Employees".first_name, "Departments".dept_name
+FROM "Employees"
+INNER JOIN "Dept_Emp" ON
+"Employees".emp_no = "Dept_Emp".emp_no
+INNER JOIN "Departments" ON 
+"Departments".dept_no = "Dept_Emp".dept_no
+WHERE "Departments".dept_name = 'Sales';
 
-ALTER TABLE "Dept_Manager" ADD CONSTRAINT "fk_Dept_Manager_emp_no" FOREIGN KEY("emp_no")
-REFERENCES "Employees" ("emp_no");
 
-ALTER TABLE "Salaries" ADD CONSTRAINT "fk_Salaries_emp_no" FOREIGN KEY("emp_no")
-REFERENCES "Employees" ("emp_no");
+--Question 7
+SELECT "Employees".emp_no, "Employees".last_name, "Employees".first_name, "Departments".dept_name
+FROM "Employees"
+INNER JOIN "Dept_Emp" ON
+"Employees".emp_no = "Dept_Emp".emp_no
+INNER JOIN "Departments" ON 
+"Departments".dept_no = "Dept_Emp".dept_no
+WHERE "Departments".dept_name = 'Sales'
+OR "Departments".dept_name = 'Development';
 
-ALTER TABLE "Titles" ADD CONSTRAINT "fk_Titles_emp_no" FOREIGN KEY("emp_no")
-REFERENCES "Employees" ("emp_no");
 
---verify that data loaded properly
-select * from "Titles";
+--Question 8
+SELECT last_name, COUNT(last_name) AS frequency
+FROM "Employees"
+GROUP BY last_name
+ORDER BY frequency DESC;
+
+
+
 
