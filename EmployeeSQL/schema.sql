@@ -31,7 +31,10 @@ CREATE TABLE "Employees" (
     "first_name" VARCHAR   NOT NULL,
     "last_name" VARCHAR   NOT NULL,
     "gender" VARCHAR   NOT NULL,
-    "hire_date" VARCHAR   NOT NULL
+    "hire_date" VARCHAR   NOT NULL,
+    CONSTRAINT "pk_Employees" PRIMARY KEY (
+        "emp_no"
+     )
 );
 
 CREATE TABLE "Salaries" (
@@ -48,11 +51,11 @@ CREATE TABLE "Titles" (
     "to_date" VARCHAR   NOT NULL
 );
 
+ALTER TABLE "Dept_Emp" ADD CONSTRAINT "fk_Dept_Emp_emp_no" FOREIGN KEY("emp_no")
+REFERENCES "Employees" ("emp_no");
+
 ALTER TABLE "Dept_Emp" ADD CONSTRAINT "fk_Dept_Emp_dept_no" FOREIGN KEY("dept_no")
 REFERENCES "Departments" ("dept_no");
-
-ALTER TABLE "Dept_Emp" ADD CONSTRAINT "fk_Dept_Emp_from_date_to_date" FOREIGN KEY("from_date", "to_date")
-REFERENCES "Salaries" ("from_date", "to_date");
 
 ALTER TABLE "Dept_Manager" ADD CONSTRAINT "fk_Dept_Manager_dept_no" FOREIGN KEY("dept_no")
 REFERENCES "Departments" ("dept_no");
@@ -60,8 +63,8 @@ REFERENCES "Departments" ("dept_no");
 ALTER TABLE "Dept_Manager" ADD CONSTRAINT "fk_Dept_Manager_emp_no" FOREIGN KEY("emp_no")
 REFERENCES "Employees" ("emp_no");
 
-ALTER TABLE "Employees" ADD CONSTRAINT "fk_Employees_emp_no" FOREIGN KEY("emp_no")
-REFERENCES "Salaries" ("emp_no");
+ALTER TABLE "Salaries" ADD CONSTRAINT "fk_Salaries_emp_no" FOREIGN KEY("emp_no")
+REFERENCES "Employees" ("emp_no");
 
 ALTER TABLE "Titles" ADD CONSTRAINT "fk_Titles_emp_no" FOREIGN KEY("emp_no")
 REFERENCES "Employees" ("emp_no");
